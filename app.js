@@ -15,14 +15,30 @@ const render = require("./lib/htmlRenderer");
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 
-// gets role of employee
+// gets role of employee (can ask for universal employee info here because this func will be called on all employees)
 function employeeType() {
     return inquirer.prompt([{
-        type: "list",
-        choices: ["Employee", "Manger", "Intern", "Engineer"],
-        name: "newEmployeeRole",
-        message: "What role is your employee?"
-    }])
+            type: "list",
+            choices: ["Employee", "Manger", "Intern", "Engineer"],
+            name: "newEmployeeRole",
+            message: "What role is your team member?"
+        },
+        {
+            type: "input",
+            name: "name",
+            message: "What is this team member's name?"
+        },
+        {
+            type: "input",
+            name: "id",
+            message: "What is this team member's ID?"
+        },
+        {
+            type: "input",
+            name: "email",
+            message: "What is this team member's Email?"
+        },
+    ])
 }
 // Work out how many times to run a loop (This will be asked after each employee is built to determin when to stop)
 function employeeCount() {
@@ -30,7 +46,7 @@ function employeeCount() {
         type: "list",
         choices: ["Yes", "No"],
         name: "makeNewEmployee",
-        message: "Would you like to add another employee?"
+        message: "Would you like to add another team member?"
     }])
 }
 // depending on employee role, ask specific details
