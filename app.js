@@ -10,7 +10,7 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
-
+const finishedTeamArray = []
 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
@@ -41,7 +41,7 @@ function employeeType() {
     ])
 }
 // Work out how many times to run a loop (This will be asked after each employee is built to determin when to stop)
-function employeeCount() {
+function moreEmployees() {
     return inquirer.prompt([{
         type: "list",
         choices: ["Yes", "No"],
@@ -79,24 +79,33 @@ async function createNewEmployee() {
         const newbie = await employeeType()
         if (newbie.type === "Engineer") {
             const newbieEngineer = await roleEngineer()
-            new Engineer(newbie.name, newbie.id, newbie.email, newbieEngineer.github)
+            let newEngineer = new Engineer(newbie.name, newbie.id, newbie.email, newbieEngineer.github)
+            finishedTeamArray.push(newEngineer)
 
         } else if (newbie.type === "Intern") {
             const newbieIntern = await roleIntern()
-            new Intern(newbie.name, newbie.id, newbie.email, newbieIntern.github)
+            let newIntern = new Intern(newbie.name, newbie.id, newbie.email, newbieIntern.github)
+            finishedTeamArray.push(newIntern)
 
         } else if (newbie.type === "Manager") {
             const newbieManager = await roleManager()
-            new Manager(newbie.name, newbie.id, newbie.email, newbieManager.github)
-
+            let newManager = new Manager(newbie.name, newbie.id, newbie.email, newbieManager.github)
+            finishedTeamArray.push(newManager)
         } else {
-            new Employee(newbie.name, newbie.id, newbie.email)
+            let newEmployee = new Employee(newbie.name, newbie.id, newbie.email)
+            finishedTeamArray.push(newEmployee)
         }
-
+        addAnother = await moreEmployees()
+        if (addAnother.type === "Yes") {
+            createNewEmployee()
+        } else {
+            render()
+        }
     } catch (error) {
-
+        console.log(error)
     }
 }
+createNewEmployee()
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
 // generate and return a block of HTML including templated divs for each employee!
