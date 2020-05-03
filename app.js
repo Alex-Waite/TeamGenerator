@@ -1,6 +1,8 @@
 const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
+const Employee = require("./lib/Employee")
+
 const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
@@ -10,7 +12,7 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
-const finishedTeamArray = []
+const employees = []
 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
@@ -19,7 +21,7 @@ const finishedTeamArray = []
 function employeeType() {
     return inquirer.prompt([{
             type: "list",
-            choices: ["Employee", "Manger", "Intern", "Engineer"],
+            choices: ["Employee", "Manager", "Intern", "Engineer"],
             name: "newEmployeeRole",
             message: "What role is your team member?"
         },
@@ -53,7 +55,7 @@ function moreEmployees() {
 function roleManager() {
     return inquirer.prompt([{
         type: "input",
-        name: "officenum",
+        name: "officeNumber",
         message: "What is this Manager's office number?"
     }])
 }
@@ -77,35 +79,48 @@ function roleIntern() {
 async function createNewEmployee() {
     try {
         const newbie = await employeeType()
-        if (newbie.type === "Engineer") {
+        if (newbie.newEmployeeRole === "Engineer") {
             const newbieEngineer = await roleEngineer()
             let newEngineer = new Engineer(newbie.name, newbie.id, newbie.email, newbieEngineer.github)
-            finishedTeamArray.push(newEngineer)
+            employees.push(newEngineer)
+            console.log(employees)
 
-        } else if (newbie.type === "Intern") {
+        } else if (newbie.newEmployeeRole === "Intern") {
             const newbieIntern = await roleIntern()
-            let newIntern = new Intern(newbie.name, newbie.id, newbie.email, newbieIntern.github)
-            finishedTeamArray.push(newIntern)
+            let newIntern = new Intern(newbie.name, newbie.id, newbie.email, newbieIntern.school)
+            employees.push(newIntern)
+            console.log(employees)
 
-        } else if (newbie.type === "Manager") {
+        } else if (newbie.newEmployeeRole === "Manager") {
             const newbieManager = await roleManager()
-            let newManager = new Manager(newbie.name, newbie.id, newbie.email, newbieManager.github)
-            finishedTeamArray.push(newManager)
+            let newManager = new Manager(newbie.name, newbie.id, newbie.email, newbieManager.officeNumber)
+            employees.push(newManager)
+            console.log(employees)
         } else {
             let newEmployee = new Employee(newbie.name, newbie.id, newbie.email)
-            finishedTeamArray.push(newEmployee)
+            employees.push(newEmployee)
+            console.log(employees)
         }
         addAnother = await moreEmployees()
-        if (addAnother.type === "Yes") {
+        if (addAnother.makeNewEmployee === "Yes") {
             createNewEmployee()
         } else {
-            render()
+            if (!OUTPUT_DIR) {
+                fs.mkdirSync(OUTPUT_DIR)
+            } else {
+                const writeTo = function (inputHTML) {
+                    fs.writeFile(outputPath, inputHTML)
+                }
+                const html = render(employees)
+                writeTo(html)
+            }
         }
     } catch (error) {
         console.log(error)
     }
 }
 createNewEmployee()
+
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
 // generate and return a block of HTML including templated divs for each employee!
