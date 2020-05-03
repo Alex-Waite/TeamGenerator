@@ -16,21 +16,47 @@ const render = require("./lib/htmlRenderer");
 // and to create objects for each team member (using the correct classes as blueprints!)
 
 // gets role of employee
-employeeType = inquirer.prompt({
-    type: "list",
-    choices: ["Employee", "Manger", "Intern", "Engineer"],
-    name: "newEmployeeRole",
-    message: "What role is your employee?"
-})
+function employeeType() {
+    return inquirer.prompt([{
+        type: "list",
+        choices: ["Employee", "Manger", "Intern", "Engineer"],
+        name: "newEmployeeRole",
+        message: "What role is your employee?"
+    }])
+}
 // Work out how many times to run a loop (This will be asked after each employee is built to determin when to stop)
-employeeCount = inquirer.prompt({
-    type: "list",
-    choices: ["Yes", "No"],
-    name: "makeNewEmployee",
-    message: "Would you like to add another employee?"
-})
+function employeeCount() {
+    return inquirer.prompt([{
+        type: "list",
+        choices: ["Yes", "No"],
+        name: "makeNewEmployee",
+        message: "Would you like to add another employee?"
+    }])
+}
+// depending on employee role, ask specific details
+function roleManager() {
+    return inquirer.prompt([{
+        type: "input",
+        name: "officenum",
+        message: "What is this Manager's office number?"
+    }])
+}
 
-// Asks 
+function roleEngineer() {
+    return inquirer.prompt([{
+        type: "input",
+        name: "github",
+        message: "What is this Engineer's GitHub Username"
+    }])
+}
+
+function roleIntern() {
+    return inquirer.prompt([{
+        type: "input",
+        name: "school",
+        message: "What school was/is this Intern enrolled at?"
+    }])
+}
 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
