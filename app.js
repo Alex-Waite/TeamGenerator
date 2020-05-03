@@ -19,11 +19,16 @@ const render = require("./lib/htmlRenderer");
 employeeType = inquirer.prompt({
     type: "list",
     choices: ["Employee", "Manger", "Intern", "Engineer"],
-    name: "employeeType",
+    name: "newEmployeeRole",
     message: "What role is your employee?"
 })
-// Work out how many times to run a loop
-
+// Work out how many times to run a loop (This will be asked after each employee is built to determin when to stop)
+employeeCount = inquirer.prompt({
+    type: "list",
+    choices: ["Yes", "No"],
+    name: "makeNewEmployee",
+    message: "Would you like to add another employee?"
+})
 
 // Asks 
 
