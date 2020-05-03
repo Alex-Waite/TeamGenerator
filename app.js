@@ -78,13 +78,19 @@ async function createNewEmployee() {
     try {
         const newbie = await employeeType()
         if (newbie.type === "Engineer") {
+            const newbieEngineer = await roleEngineer()
+            new Engineer(newbie.name, newbie.id, newbie.email, newbieEngineer.github)
 
         } else if (newbie.type === "Intern") {
+            const newbieIntern = await roleIntern()
+            new Intern(newbie.name, newbie.id, newbie.email, newbieIntern.github)
 
         } else if (newbie.type === "Manager") {
+            const newbieManager = await roleManager()
+            new Manager(newbie.name, newbie.id, newbie.email, newbieManager.github)
 
         } else {
-
+            new Employee(newbie.name, newbie.id, newbie.email)
         }
 
     } catch (error) {
