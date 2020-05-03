@@ -14,9 +14,18 @@ const render = require("./lib/htmlRenderer");
 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
-inquirer.prompt({
-    type: "empAmount"
+
+// gets role of employee
+employeeType = inquirer.prompt({
+    type: "list",
+    choices: ["Employee", "Manger", "Intern", "Engineer"],
+    name: "employeeType",
+    message: "What role is your employee?"
 })
+// Work out how many times to run a loop
+
+
+// Asks 
 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
