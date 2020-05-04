@@ -21,7 +21,7 @@ const employees = []
 function employeeType() {
     return inquirer.prompt([{
             type: "list",
-            choices: ["Employee", "Manager", "Intern", "Engineer"],
+            choices: ["Manager", "Intern", "Engineer"],
             name: "newEmployeeRole",
             message: "What role is your team member?"
         },
@@ -83,23 +83,19 @@ async function createNewEmployee() {
             const newbieEngineer = await roleEngineer()
             let newEngineer = new Engineer(newbie.name, newbie.id, newbie.email, newbieEngineer.github)
             employees.push(newEngineer)
-            console.log(employees)
+            console.log("Engineer Added")
 
         } else if (newbie.newEmployeeRole === "Intern") {
             const newbieIntern = await roleIntern()
             let newIntern = new Intern(newbie.name, newbie.id, newbie.email, newbieIntern.school)
             employees.push(newIntern)
-            console.log(employees)
+            console.log("Intern Added")
 
         } else if (newbie.newEmployeeRole === "Manager") {
             const newbieManager = await roleManager()
             let newManager = new Manager(newbie.name, newbie.id, newbie.email, newbieManager.officeNumber)
             employees.push(newManager)
-            console.log(employees)
-        } else {
-            let newEmployee = new Employee(newbie.name, newbie.id, newbie.email)
-            employees.push(newEmployee)
-            console.log(employees)
+            console.log("Manager Added")
         }
         addAnother = await moreEmployees()
         if (addAnother.makeNewEmployee === "Yes") {
@@ -109,7 +105,9 @@ async function createNewEmployee() {
                 fs.mkdirSync(OUTPUT_DIR)
             } else {
                 const writeTo = function (inputHTML) {
-                    fs.writeFile(outputPath, inputHTML)
+                    fs.writeFile(outputPath, inputHTML, complete => {
+                        console.log("Complete")
+                    })
                 }
                 const html = render(employees)
                 writeTo(html)
